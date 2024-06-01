@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load mediapath_tag %}
+
+{% block content %}
+<div class="container">
+    <div class="container">
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for course in courses %}
+                <div class="col">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <h4 class="my-0 font-weight-normal">{{ course.title }}</h4>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled mt-3 mb-4 text-start m-3">
+                                <li><img src="{% mediapath course.image %}" width="300" height="225"/></li><br>
+                                <li>{{ course.description|truncatechars:100 }}</li>
+                                <li><span>Дата создания: {{course.create_date}}</span></li>
+                            </ul>
+                             <a href="{% url 'materials:course_detail' course.pk %}"
+                               class="btn btn-primary btn-lg btn-block">Смотреть подробнее</a><br>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

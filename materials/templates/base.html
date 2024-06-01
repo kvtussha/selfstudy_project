@@ -28,9 +28,23 @@
                 <img src="{% static 'assets/img/logo.jpg' %}" alt="Logo" style="height: 40px;">
                 StudyNet
             </a>
-            <a class="btn btn-secondary ml-2" href="#courses">Все курсы</a>
+            <a class="btn btn-secondary ml-2" href="{% url 'materials:main_page' %}">Главная</a>
+            <a class="btn btn-secondary ml-2" href="{% url 'materials:all_courses' %}">Все курсы</a>
+            <a class="btn btn-secondary ml-2" href="{% url 'materials:contacts' %}">Контакты</a>
         </div>
-        <a class="btn btn-dark" href="#signup">Регистрация</a>
+        <nav class="ms-md-auto d-flex">
+            {% if user.is_authenticated %}
+                {% csrf_token %}
+                <form method="post" action="{% url 'users:logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-dark">Выйти</button>
+                </form>
+                <a class="btn btn-secondary ml-2" href="{% url 'users:profile' %}">Профиль</a>
+            {% else %}
+                <a class="btn btn-dark" href="{% url 'users:login' %}">Войти</a>
+                <a class="btn btn-dark" href="{% url 'users:register' %}">Регистрация</a>
+            {% endif %}
+    </nav>
     </div>
 </nav>
 
