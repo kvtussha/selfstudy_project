@@ -1,8 +1,8 @@
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, TemplateView, DetailView, CreateView, UpdateView, DeleteView
 
-from materials.forms import CourseForm
-from materials.models import Course
+from materials.forms import CourseForm, LessonForm
+from materials.models import Course, Lesson
 
 
 class MainView(TemplateView):
@@ -18,6 +18,11 @@ class CourseListView(ListView):
     template_name = 'courses/courses_list.html'
     context_object_name = 'courses'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['lesson_id'] = list(Lesson.objects.all())
+        return context
+
 
 class CourseDetailView(DetailView):
     model = Course
@@ -27,6 +32,13 @@ class CourseDetailView(DetailView):
     def get_object(self, queryset=None):
         self.course = super().get_object(queryset)
         return self.course
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        course = self.get_object()
+        lessons = Lesson.objects.filter(course=course)
+        context['lessons'] = lessons
+        return context
 
 
 class CourseCreateView(CreateView):
@@ -48,10 +60,52 @@ class CourseUpdateView(UpdateView):
 class CourseDeleteView(DeleteView):
     model = Course
     template_name = 'courses/course_confirm_delete.html'
-    success_url = reverse_lazy('materials:all_courses')
     context_object_name = 'course'
+    success_url = reverse_lazy('materials:all_courses')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Удаление курса'
+        return context
+
+
+class LessonDetailView(DetailView):
+    model = Lesson
+    template_name = 'lessons/lesson_detail.html'
+    context_object_name = 'lesson'
+
+    def get_object(self, queryset=None):
+        self.lesson = super().get_object(queryset)
+        return self.lesson
+
+
+class LessonCreateView(CreateView):
+    model = Lesson
+    form_class = LessonForm
+    template_name = 'lessons/lesson_form.html'
+
+    def get_success_url(self):
+        return reverse('materials:course_detail', kwargs={'pk': self.object.pk})
+
+
+class LessonUpdateView(UpdateView):
+    model = Lesson
+    form_class = LessonForm
+    template_name = 'lessons/lesson_form.html'
+
+    def get_success_url(self):
+        return reverse('materials:lesson_detail', kwargs={'pk': self.object.pk})
+
+
+class LessonDeleteView(DeleteView):
+    model = Lesson
+    template_name = 'lessons/lesson_confirm_delete.html'
+    context_object_name = 'lesson'
+
+    def get_success_url(self):
+        return reverse('materials:lesson_detail', kwargs={'pk': self.object.pk})
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Удаление урока'
         return context
