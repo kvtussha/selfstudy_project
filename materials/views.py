@@ -1,8 +1,13 @@
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, TemplateView, DetailView, CreateView, UpdateView, DeleteView
+from rest_framework.views import APIView
 
 from materials.forms import CourseForm, LessonForm
 from materials.models import Course, Lesson
+from rest_framework.response import Response
+from django.shortcuts import render
+
+from materials.serializers import CourseSerializer, LessonSerializer
 
 
 class MainView(TemplateView):

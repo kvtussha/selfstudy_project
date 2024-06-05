@@ -12,6 +12,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+ROOT_URLCONF = 'config.urls'
 
 # Application definition
 
@@ -23,8 +24,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'drf_yasg',
-    'corsheaders',
 
     'materials',
     'users',
@@ -38,11 +37,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
 ]
-
-ROOT_URLCONF = 'config.urls'
-
 
 TEMPLATES = [
     {
@@ -141,9 +136,3 @@ EMAIL_USE_SSL = True
 
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
-
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:8000',
-]
-
-CORS_ALLOW_ALL_ORIGINS = False
